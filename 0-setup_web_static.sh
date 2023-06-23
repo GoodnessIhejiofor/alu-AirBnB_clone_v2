@@ -1,21 +1,18 @@
 #!/usr/bin/env bash
-# Script to set up Nginx on web servers
+# Script that sets up your web servers for the deployment of web_static
 
-# update 
-sudo apt-get update
-# install Nginx
+
+sudo apt-get -y update
 sudo apt-get -y install nginx
 sudo service nginx start
-# create folders
-sudo mkdir -p /data/web_static/releases/test/
+
 sudo mkdir -p /data/web_static/shared/
-# create fake HTMl file
-echo "<html><head></head><body>Holberton School</body></html>" | sudo tee /data/web_static/releases/test/index.html
-# create symbolic link
+sudo mkdir -p /data/web_static/releases/test/
+echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
-# update permissions
+
 sudo chown -R ubuntu:ubuntu /data/
-# update Nginx config
-sudo sed -i '38i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t\tautoindex off;\n\t}\n' /etc/nginx/sites-available/default
-# restart Nginx
+
+sudo sed -i '44i \\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}' /etc/nginx/sites-available/default
+
 sudo service nginx restart
